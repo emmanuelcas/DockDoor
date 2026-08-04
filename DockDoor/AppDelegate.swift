@@ -28,7 +28,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let state = UpdaterState()
         updaterState = state
 
-        let anUpdaterController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: state, userDriverDelegate: nil)
+        #if DOCKDOOR_CUSTOM
+            let shouldStartUpdater = false
+        #else
+            let shouldStartUpdater = true
+        #endif
+        let anUpdaterController = SPUStandardUpdaterController(startingUpdater: shouldStartUpdater, updaterDelegate: state, userDriverDelegate: nil)
         updaterController = anUpdaterController
 
         state.updater = anUpdaterController.updater
@@ -153,7 +158,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let menu = NSMenu()
         menu.addItem(NSMenuItem(title: String(localized: "Open Settings"), action: #selector(openSettingsWindow(_:)), keyEquivalent: ""))
         menu.addItem(NSMenuItem.separator())
-        menu.addItem(NSMenuItem(title: String(localized: "Check for Updates…"), action: #selector(checkForUpdatesWrapper), keyEquivalent: ""))
+        #if !DOCKDOOR_CUSTOM
+            menu.addItem(NSMenuItem(title: String(localized: "Check for Updates…"), action: #selector(checkForUpdatesWrapper), keyEquivalent: ""))
+        #endif
         menu.addItem(NSMenuItem(title: String(localized: "Support DockDoor"), action: #selector(openDonationPage), keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: String(localized: "Leave a Review"), action: #selector(openReviewPage), keyEquivalent: ""))
         menu.addItem(NSMenuItem.separator())

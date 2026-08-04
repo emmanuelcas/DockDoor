@@ -78,82 +78,104 @@ struct SupportSettingsView: View {
 
                     Spacer()
 
-                    updateStatusBadge
+                    #if DOCKDOOR_CUSTOM
+                        Label("Custom build", systemImage: "hammer.fill")
+                            .font(.caption)
+                            .foregroundColor(.orange)
+                    #else
+                        updateStatusBadge
+                    #endif
                 }
 
                 Divider().padding(.leading, 40)
 
-                // Update channel
-                HStack(spacing: 12) {
-                    SettingsIcon(systemName: "arrow.triangle.branch", color: .blue)
+                #if DOCKDOOR_CUSTOM
+                    HStack(spacing: 12) {
+                        SettingsIcon(systemName: "hammer.fill", color: .orange)
 
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("Update Channel")
-                            .font(.body)
-                        Text("Choose between stable releases and beta versions")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-
-                    Spacer()
-
-                    Picker("", selection: $updaterState.updateChannel) {
-                        ForEach(UpdateChannel.allCases, id: \.self) { channel in
-                            Text(channel.displayName).tag(channel)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("DockDoor Custom")
+                                .font(.body)
+                            Text("Official updates are disabled so they cannot replace this custom build.")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
                         }
+
+                        Spacer()
                     }
-                    .labelsHidden()
-                    .frame(width: 100)
-                }
-                .settingsSearchTarget("support.updateChannel")
+                #else
+                    // Update channel
+                    HStack(spacing: 12) {
+                        SettingsIcon(systemName: "arrow.triangle.branch", color: .blue)
 
-                Divider().padding(.leading, 40)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Update Channel")
+                                .font(.body)
+                            Text("Choose between stable releases and beta versions")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
 
-                // Check for updates
-                HStack(spacing: 12) {
-                    SettingsIcon(systemName: "arrow.triangle.2.circlepath", color: .orange)
+                        Spacer()
 
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("Check for Updates")
-                            .font(.body)
-                        Text(lastCheckDescription)
-                            .font(.caption)
-                            .foregroundColor(.secondary)
+                        Picker("", selection: $updaterState.updateChannel) {
+                            ForEach(UpdateChannel.allCases, id: \.self) { channel in
+                                Text(channel.displayName).tag(channel)
+                            }
+                        }
+                        .labelsHidden()
+                        .frame(width: 100)
                     }
+                    .settingsSearchTarget("support.updateChannel")
 
-                    Spacer()
+                    Divider().padding(.leading, 40)
 
-                    Button("Check Now") {
-                        updaterState.checkForUpdates()
+                    // Check for updates
+                    HStack(spacing: 12) {
+                        SettingsIcon(systemName: "arrow.triangle.2.circlepath", color: .orange)
+
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Check for Updates")
+                                .font(.body)
+                            Text(lastCheckDescription)
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+
+                        Spacer()
+
+                        Button("Check Now") {
+                            updaterState.checkForUpdates()
+                        }
+                        .buttonStyle(AccentButtonStyle(small: true))
+                        .disabled(!updaterState.canCheckForUpdates)
                     }
-                    .buttonStyle(AccentButtonStyle(small: true))
-                    .disabled(!updaterState.canCheckForUpdates)
-                }
-                .settingsSearchTarget("support.checkForUpdates")
+                    .settingsSearchTarget("support.checkForUpdates")
 
-                Divider().padding(.leading, 40)
+                    Divider().padding(.leading, 40)
 
-                // Automatic updates toggle
-                HStack(spacing: 12) {
-                    SettingsIcon(systemName: "clock.arrow.2.circlepath", color: .purple)
+                    // Automatic updates toggle
+                    HStack(spacing: 12) {
+                        SettingsIcon(systemName: "clock.arrow.2.circlepath", color: .purple)
 
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("Automatic Updates")
-                            .font(.body)
-                        Text("Automatically check for updates in the background")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Automatic Updates")
+                                .font(.body)
+                            Text("Automatically check for updates in the background")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+
+                        Spacer()
+
+                        Toggle("", isOn: Binding(
+                            get: { updaterState.isAutomaticChecksEnabled },
+                            set: { _ in updaterState.toggleAutomaticChecks() }
+                        ))
+                        .labelsHidden()
                     }
-
-                    Spacer()
-
-                    Toggle("", isOn: Binding(
-                        get: { updaterState.isAutomaticChecksEnabled },
-                        set: { _ in updaterState.toggleAutomaticChecks() }
-                    ))
-                    .labelsHidden()
-                }
-                .settingsSearchTarget("support.automaticUpdates")
+                    .settingsSearchTarget("support.automaticUpdates")
+                #endif
 
                 Divider().padding(.leading, 40)
 
