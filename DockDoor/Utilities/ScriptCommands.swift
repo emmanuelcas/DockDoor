@@ -44,7 +44,7 @@ enum DockDoorCommands {
             case .noActiveWindow:
                 "No active window found"
             case .coordinatorNotAvailable:
-                "DockDoor coordinator not available"
+                "DockLens coordinator not available"
             case let .invalidPosition(pos):
                 "Invalid position: \(pos). Use: left, right, top, bottom, top-left, top-right, bottom-left, bottom-right"
             case let .invalidParameter(param):
@@ -314,7 +314,7 @@ enum DockDoorCommands {
             return "Error: Could not load command definitions"
         }
 
-        var lines: [String] = ["DockDoor AppleScript Commands", ""]
+        var lines: [String] = ["DockLens AppleScript Commands", ""]
 
         // Find all commands in the DockDoor Suite
         guard let commands = try? xml.nodes(forXPath: "//suite[@name='DockDoor Suite']/command") else {
@@ -375,7 +375,7 @@ enum DockDoorCommands {
         lines.append("  -- Positions: left, right, top, bottom,")
         lines.append("  --            top-left, top-right, bottom-left, bottom-right")
         lines.append("")
-        lines.append("USAGE: tell application \"DockDoor\" to <command>")
+        lines.append("USAGE: tell application \"DockLens\" to <command>")
 
         return lines.joined(separator: "\n")
     }

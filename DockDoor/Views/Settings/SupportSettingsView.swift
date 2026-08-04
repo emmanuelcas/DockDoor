@@ -78,8 +78,8 @@ struct SupportSettingsView: View {
 
                     Spacer()
 
-                    #if DOCKDOOR_CUSTOM
-                        Label("Custom build", systemImage: "hammer.fill")
+                    #if DOCKLENS
+                        Label("Personal build", systemImage: "hammer.fill")
                             .font(.caption)
                             .foregroundColor(.orange)
                     #else
@@ -89,14 +89,14 @@ struct SupportSettingsView: View {
 
                 Divider().padding(.leading, 40)
 
-                #if DOCKDOOR_CUSTOM
+                #if DOCKLENS
                     HStack(spacing: 12) {
                         SettingsIcon(systemName: "hammer.fill", color: .orange)
 
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("DockDoor Custom")
+                            Text("DockLens")
                                 .font(.body)
-                            Text("Official updates are disabled so they cannot replace this custom build.")
+                            Text("DockDoor updates are disabled so they cannot replace DockLens.")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                         }

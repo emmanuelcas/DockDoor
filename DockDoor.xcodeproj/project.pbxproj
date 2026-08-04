@@ -305,7 +305,7 @@
 		BB04405F2C77AD27009F1D33 /* CodableColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableColor.swift; sourceTree = "<group>"; };
 		BB0440612C77AE85009F1D33 /* GradientColorPaletteSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientColorPaletteSettingsView.swift; sourceTree = "<group>"; };
 		BB0CBE392DD8179200D55437 /* MouseEventModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MouseEventModifier.swift; sourceTree = "<group>"; };
-		BB157B652C0E31CE00997315 /* DockDoor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DockDoor.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BB157B652C0E31CE00997315 /* DockLens.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DockLens.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB157B6C2C0E31CF00997315 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BB157B6F2C0E31CF00997315 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		BB157B712C0E31CF00997315 /* DockDoor.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DockDoor.entitlements; sourceTree = "<group>"; };
@@ -674,7 +674,7 @@
 		BB157B662C0E31CE00997315 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				BB157B652C0E31CE00997315 /* DockDoor.app */,
+				BB157B652C0E31CE00997315 /* DockLens.app */,
 				AA11001122334455AA110100 /* DockDoorTests.xctest */,
 			);
 			name = Products;
@@ -1006,7 +1006,7 @@
 				BB5C36552F6CEE9E00BE947F /* MediaRemoteAdapter */,
 			);
 			productName = DockDoor;
-			productReference = BB157B652C0E31CE00997315 /* DockDoor.app */;
+			productReference = BB157B652C0E31CE00997315 /* DockLens.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -1320,12 +1320,12 @@
 				DEVELOPMENT_TEAM = 2GMJZSD96N;
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.5;
-				PRODUCT_BUNDLE_IDENTIFIER = com.emmanuelcas.DockDoorCustomTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.emmanuelcas.DockLensTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.10;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DockDoor.app/Contents/MacOS/DockDoor";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DockLens.app/Contents/MacOS/DockLens";
 			};
 			name = Debug;
 		};
@@ -1339,12 +1339,12 @@
 				DEVELOPMENT_TEAM = 2GMJZSD96N;
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.5;
-				PRODUCT_BUNDLE_IDENTIFIER = com.emmanuelcas.DockDoorCustomTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.emmanuelcas.DockLensTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.10;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DockDoor.app/Contents/MacOS/DockDoor";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DockLens.app/Contents/MacOS/DockLens";
 			};
 			name = Release;
 		};
@@ -1500,7 +1500,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DockDoor/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "DockDoor Custom";
+				INFOPLIST_KEY_CFBundleDisplayName = DockLens;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSAppleEventsUsageDescription = "DockDoor uses AppleEvents to fetch music info from Music and Spotify.";
@@ -1512,8 +1512,9 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 1.18.3;
-				PRODUCT_BUNDLE_IDENTIFIER = com.emmanuelcas.DockDoorCustom.debug;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.emmanuelcas.DockLens.debug;
+				PRODUCT_MODULE_NAME = DockDoor;
+				PRODUCT_NAME = DockLens;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				RUNTIME_EXCEPTION_ALLOW_DYLD_ENVIRONMENT_VARIABLES = NO;
 				RUNTIME_EXCEPTION_ALLOW_JIT = NO;
@@ -1522,7 +1523,7 @@
 				RUNTIME_EXCEPTION_DISABLE_EXECUTABLE_PAGE_PROTECTION = NO;
 				RUNTIME_EXCEPTION_DISABLE_LIBRARY_VALIDATION = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DOCKDOOR_CUSTOM";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DOCKLENS";
 				SWIFT_VERSION = 5.10;
 			};
 			name = Debug;
@@ -1553,7 +1554,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DockDoor/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "DockDoor Custom";
+				INFOPLIST_KEY_CFBundleDisplayName = DockLens;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSAppleEventsUsageDescription = "DockDoor uses AppleEvents to fetch music info from Music and Spotify.";
@@ -1565,8 +1566,9 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 1.18.3;
-				PRODUCT_BUNDLE_IDENTIFIER = com.emmanuelcas.DockDoorCustom;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.emmanuelcas.DockLens;
+				PRODUCT_MODULE_NAME = DockDoor;
+				PRODUCT_NAME = DockLens;
 				RUNTIME_EXCEPTION_ALLOW_DYLD_ENVIRONMENT_VARIABLES = NO;
 				RUNTIME_EXCEPTION_ALLOW_JIT = NO;
 				RUNTIME_EXCEPTION_ALLOW_UNSIGNED_EXECUTABLE_MEMORY = NO;
@@ -1574,7 +1576,7 @@
 				RUNTIME_EXCEPTION_DISABLE_EXECUTABLE_PAGE_PROTECTION = NO;
 				RUNTIME_EXCEPTION_DISABLE_LIBRARY_VALIDATION = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DOCKDOOR_CUSTOM";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DOCKLENS";
 				SWIFT_VERSION = 5.10;
 			};
 			name = Release;

@@ -28,7 +28,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let state = UpdaterState()
         updaterState = state
 
-        #if DOCKDOOR_CUSTOM
+        #if DOCKLENS
             let shouldStartUpdater = false
         #else
             let shouldStartUpdater = true
@@ -89,7 +89,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 dockLocker = DockLocker()
             }
 
-            #if !DOCKDOOR_CUSTOM
+            #if !DOCKLENS
                 if updater.automaticallyChecksForUpdates {
                     print("AppDelegate: Automatic updates enabled, checking in background.")
                     updater.checkForUpdatesInBackground()
@@ -160,14 +160,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let menu = NSMenu()
         menu.addItem(NSMenuItem(title: String(localized: "Open Settings"), action: #selector(openSettingsWindow(_:)), keyEquivalent: ""))
         menu.addItem(NSMenuItem.separator())
-        #if !DOCKDOOR_CUSTOM
+        #if !DOCKLENS
             menu.addItem(NSMenuItem(title: String(localized: "Check for Updates…"), action: #selector(checkForUpdatesWrapper), keyEquivalent: ""))
         #endif
-        menu.addItem(NSMenuItem(title: String(localized: "Support DockDoor"), action: #selector(openDonationPage), keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: "Support DockDoor Project", action: #selector(openDonationPage), keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: String(localized: "Leave a Review"), action: #selector(openReviewPage), keyEquivalent: ""))
         menu.addItem(NSMenuItem.separator())
-        menu.addItem(NSMenuItem(title: String(localized: "Restart DockDoor"), action: #selector(restartAppWrapper), keyEquivalent: ""))
-        menu.addItem(NSMenuItem(title: String(localized: "Quit DockDoor"), action: #selector(quitAppWrapper), keyEquivalent: "q"))
+        menu.addItem(NSMenuItem(title: "Restart DockLens", action: #selector(restartAppWrapper), keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: "Quit DockLens", action: #selector(quitAppWrapper), keyEquivalent: "q"))
         button.menu = menu
     }
 
