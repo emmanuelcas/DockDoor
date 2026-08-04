@@ -89,10 +89,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 dockLocker = DockLocker()
             }
 
-            if updater.automaticallyChecksForUpdates {
-                print("AppDelegate: Automatic updates enabled, checking in background.")
-                updater.checkForUpdatesInBackground()
-            }
+            #if !DOCKDOOR_CUSTOM
+                if updater.automaticallyChecksForUpdates {
+                    print("AppDelegate: Automatic updates enabled, checking in background.")
+                    updater.checkForUpdatesInBackground()
+                }
+            #endif
         }
 
         Task(priority: .high) { [weak self] in
