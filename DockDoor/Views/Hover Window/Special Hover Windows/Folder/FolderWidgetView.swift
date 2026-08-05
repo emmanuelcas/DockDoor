@@ -292,7 +292,7 @@ private struct FolderWidgetListView: View {
             stateView(
                 systemName: "lock.fill",
                 title: String(localized: "Folder Access Required"),
-                message: "Choose this folder to let DockLens show its contents.",
+                message: "Choose this folder to let PeekDeck show its contents.",
                 buttonTitle: String(localized: "Allow Access..."),
                 action: requestFolderAccess
             )
@@ -306,7 +306,7 @@ private struct FolderWidgetListView: View {
             stateView(
                 systemName: "exclamationmark.triangle",
                 title: String(localized: "Unable to Load Folder"),
-                message: "DockLens could not read this folder."
+                message: "PeekDeck could not read this folder."
             )
         }
     }

@@ -597,7 +597,7 @@ struct WindowPreviewHoverContainer: View {
         Group {
             switch effectiveAppNameStyle {
             case .shadowed:
-                if trimmedAppName == "DockLens" {
+                if trimmedAppName == "PeekDeck" {
                     FluidGradient(
                         blobs: rainbowGradientColors,
                         highlights: rainbowGradientHighlights,
@@ -659,7 +659,7 @@ struct WindowPreviewHoverContainer: View {
                         )
                 }
             case .default, .popover:
-                if trimmedAppName == "DockLens" {
+                if trimmedAppName == "PeekDeck" {
                     FluidGradient(
                         blobs: rainbowGradientColors,
                         highlights: rainbowGradientHighlights,

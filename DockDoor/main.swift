@@ -1,23 +1,24 @@
 import AppKit
 
-#if DOCKLENS
+#if PEEKDECK
     private let previousPreferencesDomains = [
+        "com.emmanuelcas.DockLens",
         "com.emmanuelcas.DockDoorCustom",
         "com.ethanbills.DockDoor",
     ]
-    private let preferencesMigrationMarker = "didMigrateDockLensPreferences"
+    private let preferencesMigrationMarker = "didMigratePeekDeckPreferences"
 
     private func migratePreviousPreferencesIfNeeded() {
         guard ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] == nil else { return }
 
         let defaults = UserDefaults.standard
         guard !defaults.bool(forKey: preferencesMigrationMarker),
-              let dockLensPreferencesDomain = Bundle.main.bundleIdentifier
+              let peekDeckPreferencesDomain = Bundle.main.bundleIdentifier
         else {
             return
         }
 
-        var migratedPreferences = defaults.persistentDomain(forName: dockLensPreferencesDomain) ?? [:]
+        var migratedPreferences = defaults.persistentDomain(forName: peekDeckPreferencesDomain) ?? [:]
 
         for sourceDomain in previousPreferencesDomains {
             let sourcePreferences = defaults.persistentDomain(forName: sourceDomain) ?? [:]

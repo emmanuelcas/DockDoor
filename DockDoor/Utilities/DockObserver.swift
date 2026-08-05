@@ -227,7 +227,7 @@ final class DockObserver {
 
             MessageUtil.showAlert(
                 title: "Accessibility Permissions Required",
-                message: "You need to enable accessibility permissions for DockLens to function. Click OK to open System Settings, then restart DockLens after granting permission.",
+                message: "You need to enable accessibility permissions for PeekDeck to function. Click OK to open System Settings, then restart PeekDeck after granting permission.",
                 actions: [.ok, .cancel],
                 completion: { _ in
                     SystemPreferencesHelper.openAccessibilityPreferences()

@@ -94,7 +94,7 @@ enum FolderWidgetAuthorization {
     @MainActor
     static func requestAccess(to url: URL) -> URL? {
         let panel = NSOpenPanel()
-        panel.message = "Choose this folder to let DockLens show its contents."
+        panel.message = "Choose this folder to let PeekDeck show its contents."
         panel.prompt = String(localized: "Allow Access")
         panel.canChooseFiles = false
         panel.canChooseDirectories = true

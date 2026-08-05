@@ -105,7 +105,7 @@ struct FiltersSettingsView: View {
                 // App Filters Section
                 SettingsGroup(header: "Application Filters") {
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Hide specific applications from DockLens previews.")
+                        Text("Hide specific applications from PeekDeck previews.")
                             .font(.footnote)
                             .foregroundColor(.secondary)
                             .padding(.bottom, 4)
@@ -307,7 +307,7 @@ struct FiltersSettingsView: View {
                 AppPickerSheet(
                     selectedApps: $appNameFilters,
                     title: "Application Filters",
-                    description: "Uncheck apps to hide them from DockLens previews.",
+                    description: "Uncheck apps to hide them from PeekDeck previews.",
                     selectionMode: .exclude
                 )
             }

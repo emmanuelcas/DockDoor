@@ -19,7 +19,7 @@ enum SettingsSearchCatalog {
         ),
         SettingsSearchItem(
             id: "general.launchAtLogin",
-            title: "Launch DockLens at login",
+            title: "Launch PeekDeck at login",
             keywords: ["startup", "boot", "open", "auto"],
             tab: "General",
             section: String(localized: "Application Basics"),
@@ -1454,7 +1454,7 @@ enum SettingsSearchCatalog {
         SettingsSearchItem(
             id: "filters.appFilters",
             title: String(localized: "Application Filters"),
-            description: "Hide specific applications from DockLens previews.",
+            description: "Hide specific applications from PeekDeck previews.",
             keywords: ["blacklist", "hide", "exclude", "app", "block"],
             tab: "Filters",
             section: String(localized: "Application Filters"),

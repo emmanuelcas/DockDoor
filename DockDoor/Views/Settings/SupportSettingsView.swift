@@ -78,7 +78,7 @@ struct SupportSettingsView: View {
 
                     Spacer()
 
-                    #if DOCKLENS
+                    #if PEEKDECK
                         Label("Personal build", systemImage: "hammer.fill")
                             .font(.caption)
                             .foregroundColor(.orange)
@@ -89,14 +89,14 @@ struct SupportSettingsView: View {
 
                 Divider().padding(.leading, 40)
 
-                #if DOCKLENS
+                #if PEEKDECK
                     HStack(spacing: 12) {
                         SettingsIcon(systemName: "hammer.fill", color: .orange)
 
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("DockLens")
+                            Text("PeekDeck")
                                 .font(.body)
-                            Text("DockDoor updates are disabled so they cannot replace DockLens.")
+                            Text("Updates from the original DockDoor project are disabled so they cannot replace PeekDeck.")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                         }

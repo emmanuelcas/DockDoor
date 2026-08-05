@@ -4,11 +4,11 @@ import os.log
 
 /// Debug logger for tracking performance-critical operations
 enum DebugLogger {
-    private static let log = OSLog(subsystem: Bundle.main.bundleIdentifier ?? "DockLens", category: "Debug")
+    private static let log = OSLog(subsystem: Bundle.main.bundleIdentifier ?? "PeekDeck", category: "Debug")
     private static let queue = DispatchQueue(label: "DebugLogger", qos: .utility)
     private static let logFileURL: URL = {
         let tempDir = FileManager.default.temporaryDirectory
-        return tempDir.appendingPathComponent("DockLens-Debug.log")
+        return tempDir.appendingPathComponent("PeekDeck-Debug.log")
     }()
 
     private static func formattedTimestamp() -> String { Date.now.description }
