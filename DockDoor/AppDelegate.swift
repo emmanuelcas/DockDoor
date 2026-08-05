@@ -145,7 +145,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             return
         }
 
-        if let icon = NSImage(named: .logo) {
+        if let icon = NSImage(named: .peekDeckMiniIcon) {
             let iconSize = NSStatusBar.system.thickness * 0.9
             let resizedIcon = icon.resizedToFit(in: NSSize(width: iconSize, height: iconSize))
             resizedIcon.isTemplate = true

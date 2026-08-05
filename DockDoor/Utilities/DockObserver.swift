@@ -166,7 +166,11 @@ final class DockObserver {
     }
 
     private func performHealthCheck() {
-        guard let currentDockPID else {
+        guard let currentDockPID,
+              axObserver != nil,
+              subscribedDockList != nil
+        else {
+            teardownObserver()
             setupSelectedDockItemObserver()
             return
         }
@@ -217,7 +221,6 @@ final class DockObserver {
         }
 
         let dockAppPID = dockApp.processIdentifier
-        currentDockPID = dockAppPID
 
         let dockAppElement = AXUIElementCreateApplication(dockAppPID)
 
@@ -255,8 +258,10 @@ final class DockObserver {
             try axList.subscribeToNotification(axObserver, kAXSelectedChildrenChangedNotification) {
                 CFRunLoopAddSource(CFRunLoopGetCurrent(), AXObserverGetRunLoopSource(axObserver), .commonModes)
             }
+            currentDockPID = dockAppPID
             subscribedDockList = axList
         } catch {
+            self.axObserver = nil
             return
         }
     }

@@ -14,7 +14,7 @@ struct FirstTimeCongratsTabView: View {
 
             CustomizableFluidGradientView()
                 .mask(
-                    Image(nsImage: NSImage(named: .logo) ?? NSImage())
+                    Image(nsImage: NSImage(named: .peekDeckMiniIcon) ?? NSImage())
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                 )
