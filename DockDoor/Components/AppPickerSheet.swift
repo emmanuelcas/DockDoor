@@ -20,6 +20,7 @@ struct AppPickerSheet: View {
     @State private var installedApps: [InstalledApp] = []
     @State private var isLoading = true
     @State private var searchText = ""
+    @State private var draftSelectedApps: [String]
 
     enum SelectionMode {
         case include // Selected apps ARE in the list (for grouping)
@@ -33,6 +34,7 @@ struct AppPickerSheet: View {
         selectionMode: SelectionMode = .include
     ) {
         _selectedApps = selectedApps
+        _draftSelectedApps = State(initialValue: selectedApps.wrappedValue)
         self.title = title
         self.description = description
         self.selectionMode = selectionMode
@@ -95,16 +97,22 @@ struct AppPickerSheet: View {
 
             // Footer
             HStack {
-                Text("\(selectedApps.count) app\(selectedApps.count == 1 ? "" : "s") selected")
+                Text("\(draftSelectedApps.count) app\(draftSelectedApps.count == 1 ? "" : "s") selected")
                     .font(.caption)
                     .foregroundColor(.secondary)
 
                 Spacer()
 
-                Button("Done") {
+                Button("Cancel") {
                     dismiss()
                 }
-                .keyboardShortcut(.return)
+                .keyboardShortcut(.cancelAction)
+
+                Button("Done") {
+                    selectedApps = draftSelectedApps
+                    dismiss()
+                }
+                .keyboardShortcut(.defaultAction)
                 .buttonStyle(AccentButtonStyle())
             }
             .padding()
@@ -123,32 +131,32 @@ struct AppPickerSheet: View {
                 get: {
                     switch selectionMode {
                     case .include:
-                        selectedApps.contains(app.bundleIdentifier)
+                        draftSelectedApps.contains(app.bundleIdentifier)
                     case .exclude:
                         // For filtering: checked = NOT in filter list (app is shown)
-                        !selectedApps.contains(app.bundleIdentifier) &&
-                            !selectedApps.contains(where: { $0.caseInsensitiveCompare(app.name) == .orderedSame })
+                        !draftSelectedApps.contains(app.bundleIdentifier) &&
+                            !draftSelectedApps.contains(where: { $0.caseInsensitiveCompare(app.name) == .orderedSame })
                     }
                 },
                 set: { isOn in
                     switch selectionMode {
                     case .include:
                         if isOn {
-                            if !selectedApps.contains(app.bundleIdentifier) {
-                                selectedApps.append(app.bundleIdentifier)
+                            if !draftSelectedApps.contains(app.bundleIdentifier) {
+                                draftSelectedApps.append(app.bundleIdentifier)
                             }
                         } else {
-                            selectedApps.removeAll { $0 == app.bundleIdentifier }
+                            draftSelectedApps.removeAll { $0 == app.bundleIdentifier }
                         }
                     case .exclude:
                         if isOn {
                             // Remove from filter (show the app)
-                            selectedApps.removeAll { $0 == app.bundleIdentifier }
-                            selectedApps.removeAll { $0.caseInsensitiveCompare(app.name) == .orderedSame }
+                            draftSelectedApps.removeAll { $0 == app.bundleIdentifier }
+                            draftSelectedApps.removeAll { $0.caseInsensitiveCompare(app.name) == .orderedSame }
                         } else {
                             // Add to filter (hide the app)
-                            if !selectedApps.contains(app.bundleIdentifier) {
-                                selectedApps.append(app.bundleIdentifier)
+                            if !draftSelectedApps.contains(app.bundleIdentifier) {
+                                draftSelectedApps.append(app.bundleIdentifier)
                             }
                         }
                     }
