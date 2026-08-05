@@ -67,7 +67,7 @@ struct PermissionsView: View {
     }
 
     private func openScreenRecordingPreferences() {
-        SystemPreferencesHelper.openScreenRecordingPreferences()
+        SystemPreferencesHelper.requestScreenRecordingPermission()
     }
 
     private func skipScreenRecording() {

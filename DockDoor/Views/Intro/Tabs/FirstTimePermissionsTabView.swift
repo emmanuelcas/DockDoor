@@ -45,7 +45,7 @@ struct FirstTimePermissionsTabView: View {
                     description: String(localized: "Optional — for window preview images"),
                     isGranted: permissionsChecker.screenRecordingPermission,
                     iconName: "record.circle",
-                    action: { SystemPreferencesHelper.openScreenRecordingPreferences() },
+                    action: { SystemPreferencesHelper.requestScreenRecordingPermission() },
                     disableShine: false
                 )
             }

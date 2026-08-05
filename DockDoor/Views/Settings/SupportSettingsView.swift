@@ -47,7 +47,7 @@ struct SupportSettingsView: View {
                     description: "Required for capturing window previews. Without this, only compact list view is available.",
                     icon: "record.circle",
                     isGranted: permissionsChecker.screenRecordingPermission,
-                    action: { SystemPreferencesHelper.openScreenRecordingPreferences() }
+                    action: { SystemPreferencesHelper.requestScreenRecordingPermission() }
                 )
                 .settingsSearchTarget("support.screenRecording")
             }

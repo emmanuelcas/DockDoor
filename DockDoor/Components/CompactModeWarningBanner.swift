@@ -41,7 +41,7 @@ struct CompactModeWarningBanner: View {
 
             if showSettingsButton {
                 Button(action: {
-                    SystemPreferencesHelper.openScreenRecordingPreferences()
+                    SystemPreferencesHelper.requestScreenRecordingPermission()
                 }) {
                     Text("Open Settings")
                         .font(.caption.weight(.medium))
