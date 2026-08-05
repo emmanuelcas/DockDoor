@@ -10,12 +10,21 @@ private let windowProcessingDebounceInterval: TimeInterval = Defaults[.windowPro
 private let axObserverWorkQueue = DispatchQueue(label: "ddObsWorkQueue", qos: .userInitiated)
 
 class WindowManipulationObservers {
+    private typealias PendingCacheUpdate = (
+        id: UUID,
+        workItem: DispatchWorkItem,
+        hasStateAdjustment: Bool,
+        needsValidation: Bool
+    )
+
     private let previewCoordinator: SharedPreviewWindowCoordinator
 
     private var observers: [pid_t: AXObserver] = [:]
+    private var observedWindows: [pid_t: Set<AXUIElement>] = [:]
+    private var lastKnownAXWindowCounts: [pid_t: Int] = [:]
     private var lastKnownWindowPositions: [CGWindowID: CGPoint] = [:]
     private var debouncedTasks: [String: Task<Void, Never>] = [:]
-    var cacheUpdateWorkItem: (workItem: DispatchWorkItem, hasStateAdjustment: Bool, needsValidation: Bool)?
+    private var cacheUpdateWorkItems: [pid_t: PendingCacheUpdate] = [:]
     var updateDateTimeWorkItem: DispatchWorkItem?
     private func debounce(key: String, delay: TimeInterval = windowProcessingDebounceInterval, operation: @escaping () async -> Void) {
         debouncedTasks[key]?.cancel()
@@ -189,6 +198,40 @@ class WindowManipulationObservers {
             CFRunLoopAddSource(CFRunLoopGetMain(), AXObserverGetRunLoopSource(observer), .defaultMode)
 
             observers[pid] = observer
+            observeWindowDestruction(for: appElement, pid: pid)
+            let initialWindowCount = (try? appElement.windows())?.count ?? 0
+            axObserverWorkQueue.async { [weak self] in
+                self?.lastKnownAXWindowCounts[pid] = initialWindowCount
+            }
+        }
+    }
+
+    private func observeWindowDestruction(for appElement: AXUIElement, pid: pid_t) {
+        guard let windows = try? appElement.windows() else { return }
+        for window in windows {
+            observeWindowDestruction(window, pid: pid)
+        }
+    }
+
+    private func observeWindowDestruction(_ window: AXUIElement, pid: pid_t) {
+        guard let observer = observers[pid] else { return }
+
+        var windows = observedWindows[pid, default: []]
+        guard windows.insert(window).inserted else { return }
+
+        let result = AXObserverAddNotification(
+            observer,
+            window,
+            kAXUIElementDestroyedNotification as CFString,
+            UnsafeMutableRawPointer(bitPattern: Int(pid))
+        )
+        if result == .success || result == .notificationAlreadyRegistered {
+            observedWindows[pid] = windows
+        } else {
+            DebugLogger.log(
+                "observeWindowDestruction",
+                details: "Could not observe PID \(pid) window: AXError \(result.rawValue)"
+            )
         }
     }
 
@@ -214,11 +257,19 @@ class WindowManipulationObservers {
         AXObserverRemoveNotification(observer, appElement, kAXWindowMovedNotification as CFString)
         AXObserverRemoveNotification(observer, appElement, kAXTitleChangedNotification as CFString)
 
+        for window in observedWindows.removeValue(forKey: pid) ?? [] {
+            AXObserverRemoveNotification(observer, window, kAXUIElementDestroyedNotification as CFString)
+        }
+        cacheUpdateWorkItems[pid]?.workItem.cancel()
+        cacheUpdateWorkItems.removeValue(forKey: pid)
         observers.removeValue(forKey: pid)
+        axObserverWorkQueue.async { [weak self] in
+            self?.lastKnownAXWindowCounts.removeValue(forKey: pid)
+        }
     }
 
     func handleNewWindow(for pid: pid_t) {
-        debounce(key: "windowCreation") {
+        debounce(key: "windowCreation-\(pid)") {
             if let app = NSRunningApplication(processIdentifier: pid) {
                 DebugLogger.log("handleNewWindow", details: "App: \(app.localizedName ?? "Unknown") (PID: \(pid))")
                 await DebugLogger.measureAsync("updateNewWindowsForApp", details: "PID: \(pid)") {
@@ -233,6 +284,9 @@ class WindowManipulationObservers {
 
         switch notificationName {
         case kAXFocusedUIElementChangedNotification, kAXFocusedWindowChangedNotification, kAXMainWindowChangedNotification:
+            if notificationName != (kAXFocusedUIElementChangedNotification as String) {
+                scheduleAXWindowCountRefresh(for: app, detectLastWindowClose: true)
+            }
             let appAX = AXUIElementCreateApplication(app.processIdentifier)
             let focusedWindowID = (try? appAX.focusedWindow()).flatMap { try? $0.cgWindowId() }
             Task { @MainActor [weak self] in
@@ -250,6 +304,10 @@ class WindowManipulationObservers {
                 }
             }
         case kAXUIElementDestroyedNotification:
+            scheduleAXWindowCountRefresh(for: app, detectLastWindowClose: true)
+            DispatchQueue.main.async { [weak self] in
+                self?.observedWindows[pid]?.remove(element)
+            }
             if let windowID = try? element.cgWindowId() {
                 lastKnownWindowPositions.removeValue(forKey: windowID)
             }
@@ -312,6 +370,11 @@ class WindowManipulationObservers {
                 })
             }
         case kAXWindowCreatedNotification:
+            scheduleAXWindowCountRefresh(for: app, detectLastWindowClose: false)
+            DispatchQueue.main.async { [weak self] in
+                let appElement = AXUIElementCreateApplication(pid)
+                self?.observeWindowDestruction(for: appElement, pid: pid)
+            }
             handleNewWindow(for: pid)
         case kAXTitleChangedNotification:
             let windowID = try? element.cgWindowId()
@@ -348,6 +411,30 @@ class WindowManipulationObservers {
         }
     }
 
+    private func scheduleAXWindowCountRefresh(for app: NSRunningApplication, detectLastWindowClose: Bool) {
+        let pid = app.processIdentifier
+        let appAX = AXUIElementCreateApplication(pid)
+        axObserverWorkQueue.asyncAfter(deadline: .now() + windowProcessingDebounceInterval) { [weak self] in
+            guard let self,
+                  !app.isTerminated,
+                  let liveWindows = try? appAX.windows()
+            else { return }
+
+            let previousCount = lastKnownAXWindowCounts[pid] ?? liveWindows.count
+            lastKnownAXWindowCounts[pid] = liveWindows.count
+            guard detectLastWindowClose,
+                  previousCount > 0,
+                  liveWindows.isEmpty
+            else { return }
+
+            WindowUtil.quitAppOnLastWindowCloseIfNeeded(
+                app: app,
+                previousWindowCount: previousCount,
+                remainingWindowCount: 0
+            )
+        }
+    }
+
     private func updateTimestampIfAppActive(element: AXUIElement, app: NSRunningApplication) {
         updateDateTimeWorkItem?.cancel()
 
@@ -369,29 +456,34 @@ class WindowManipulationObservers {
                                    validate: Bool = false,
                                    stateAdjustment: ((inout Set<WindowInfo>) -> Void)? = nil)
     {
-        let inheritedValidation = cacheUpdateWorkItem?.needsValidation ?? false
+        let pid = app.processIdentifier
+        let existingUpdate = cacheUpdateWorkItems[pid]
+        let inheritedValidation = existingUpdate?.needsValidation ?? false
 
-        if cacheUpdateWorkItem?.hasStateAdjustment != true {
-            cacheUpdateWorkItem?.workItem.cancel()
+        if existingUpdate?.hasStateAdjustment != true {
+            existingUpdate?.workItem.cancel()
         }
 
         let effectiveValidate = validate || inheritedValidation
         let hasStateAdjustment = stateAdjustment != nil
+        let updateID = UUID()
         let workItem = DispatchWorkItem { [weak self] in
-            guard let self else { return }
+            guard let self,
+                  cacheUpdateWorkItems[pid]?.id == updateID
+            else { return }
             DebugLogger.measure("updateWindowCache", details: "App: \(app.localizedName ?? "Unknown"), Notification: \(notification), Validate: \(effectiveValidate)") {
                 WindowUtil.updateWindowCache(for: app) { windowSet in
                     let previousWindows = windowSet
+                    let destroyedCachedWindow = notification == (kAXUIElementDestroyedNotification as String) &&
+                        self.didDestroyCachedWindow(element, previousWindows: previousWindows)
                     if effectiveValidate {
                         windowSet = windowSet.filter { WindowUtil.isValidElement($0.axElement) }
                     }
+                    if destroyedCachedWindow {
+                        self.removeDestroyedWindow(element, from: &windowSet)
+                    }
                     stateAdjustment?(&windowSet)
-                    if notification == (kAXUIElementDestroyedNotification as String),
-                       self.didDestroyCachedWindow(
-                           element,
-                           previousWindows: previousWindows
-                       )
-                    {
+                    if destroyedCachedWindow {
                         WindowUtil.quitAppOnLastWindowCloseIfNeeded(
                             app: app,
                             previousWindowCount: previousWindows.count,
@@ -400,9 +492,9 @@ class WindowManipulationObservers {
                     }
                 }
             }
-            cacheUpdateWorkItem = nil
+            cacheUpdateWorkItems.removeValue(forKey: pid)
         }
-        cacheUpdateWorkItem = (workItem, hasStateAdjustment, effectiveValidate)
+        cacheUpdateWorkItems[pid] = (updateID, workItem, hasStateAdjustment, effectiveValidate)
         axObserverWorkQueue.asyncAfter(deadline: .now() + windowProcessingDebounceInterval, execute: workItem)
     }
 
@@ -415,6 +507,19 @@ class WindowManipulationObservers {
             return false
         }
         return previousWindows.contains { $0.id == destroyedWindowID }
+    }
+
+    private func removeDestroyedWindow(_ destroyedElement: AXUIElement, from windows: inout Set<WindowInfo>) {
+        let destroyedWindowID = try? destroyedElement.cgWindowId()
+        windows = windows.filter { window in
+            if window.axElement == destroyedElement {
+                return false
+            }
+            if let destroyedWindowID, window.id == destroyedWindowID {
+                return false
+            }
+            return true
+        }
     }
 
     private func update(windowSet: inout Set<WindowInfo>,
