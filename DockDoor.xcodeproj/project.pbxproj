@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		16E84EF915864110A787EB048F6F7900 /* QuitAppsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 772E03C6DCBB4CEEBD6566C04612E611 /* QuitAppsSettingsView.swift */; };
 		0531F8D22C3CC04600327808 /* AppearanceSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0531F8D12C3CC04600327808 /* AppearanceSettingsView.swift */; };
 		0596C2C32C3E060D00DCABEF /* PrivateApis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0596C2C22C3E060D00DCABEF /* PrivateApis.swift */; };
 		05C0C7182C60629C000ADAC6 /* AXUIElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C0C7172C60629C000ADAC6 /* AXUIElement.swift */; };
@@ -236,6 +237,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		772E03C6DCBB4CEEBD6566C04612E611 /* QuitAppsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuitAppsSettingsView.swift; sourceTree = "<group>"; };
 		033B1F63CB464113ADA3868696F486CF /* WindowlessAppPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowlessAppPreview.swift; sourceTree = "<group>"; };
 		0531F8D12C3CC04600327808 /* AppearanceSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettingsView.swift; sourceTree = "<group>"; };
 		0596C2C22C3E060D00DCABEF /* PrivateApis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateApis.swift; sourceTree = "<group>"; };
@@ -944,6 +946,7 @@
 				7D264F468F734971AE701690 /* ActiveAppIndicatorSettingsView.swift */,
 				BB1CBD572C1BA800003969BC /* MainSettingsView.swift */,
 				970D8CBC36D84F14B8E6E83487035CFB /* DockPreviewsSettingsView.swift */,
+				772E03C6DCBB4CEEBD6566C04612E611 /* QuitAppsSettingsView.swift */,
 				2361530A12344D0090E22EC428DC77D0 /* WindowSwitcherBehaviorSettingsView.swift */,
 				99C808769D1048FF95FCDA50FA52116A /* CmdTabSettingsView.swift */,
 				B056906A7ACD4903BD5E1627B359AE2C /* AdvancedSettingsView.swift */,
@@ -1277,6 +1280,7 @@
 				BB04405B2C77A013009F1D33 /* GradientColorPaletteSettings.swift in Sources */,
 				BB1CBD582C1BA800003969BC /* MainSettingsView.swift in Sources */,
 				4E665A7B0E9F4D458307E40493674B2B /* DockPreviewsSettingsView.swift in Sources */,
+				16E84EF915864110A787EB048F6F7900 /* QuitAppsSettingsView.swift in Sources */,
 				D9F56880CB0E4365980B4DDD87BB20AC /* WindowSwitcherBehaviorSettingsView.swift in Sources */,
 				EBE2166867324098AFE30B239FF83CE8 /* CmdTabSettingsView.swift in Sources */,
 				5E55EE57430C4695BD7681A73BF3BF9D /* AdvancedSettingsView.swift in Sources */,

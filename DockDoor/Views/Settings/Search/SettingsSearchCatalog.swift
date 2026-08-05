@@ -1,7 +1,7 @@
 import Foundation
 
 enum SettingsSearchCatalog {
-    static let items: [SettingsSearchItem] = generalItems + dockPreviewItems + windowSwitcherItems
+    static let items: [SettingsSearchItem] = generalItems + dockPreviewItems + quitAppsItems + windowSwitcherItems
         + cmdTabItems + dockLockingItems + appearanceItems + gesturesItems + filtersItems
         + widgetItems + advancedItems + supportItems
 
@@ -258,45 +258,51 @@ enum SettingsSearchCatalog {
             icon: "rectangle.stack"
         ),
         SettingsSearchItem(
-            id: "dockPreviews.cmdRightClickQuit",
-            title: String(localized: "CMD + Right Click on dock icon to quit app"),
-            keywords: ["quit", "right click", "command", "force"],
-            tab: "DockPreviews",
-            section: String(localized: "Dock Interaction"),
-            icon: "xmark.circle"
-        ),
-        SettingsSearchItem(
-            id: "dockPreviews.quitOnClose",
-            title: String(localized: "Quit app when closing its last window"),
-            description: String(localized: "When an app has only one window left, closing it will quit the app. Useful as a replacement for Swift Quit."),
-            keywords: ["quit", "close", "last window", "allow list", "ignore list", "exclude"],
-            tab: "DockPreviews",
-            section: String(localized: "Dock Interaction"),
-            icon: "xmark.app.fill"
-        ),
-        SettingsSearchItem(
-            id: "dockPreviews.quitOnCloseMode",
-            title: String(localized: "Apply quit behavior to"),
-            keywords: ["quit", "close", "scope", "mode", "allow list", "ignore list"],
-            tab: "DockPreviews",
-            section: String(localized: "Dock Interaction"),
-            icon: "checklist"
-        ),
-        SettingsSearchItem(
-            id: "dockPreviews.quitOnCloseApps",
-            title: String(localized: "Select Apps..."),
-            keywords: ["quit", "close", "apps", "allow list", "ignore list", "exclude"],
-            tab: "DockPreviews",
-            section: String(localized: "Dock Interaction"),
-            icon: "app.badge.checkmark"
-        ),
-        SettingsSearchItem(
             id: "dockPreviews.buffer",
             title: String(localized: "Window Buffer from Dock (pixels)"),
             keywords: ["buffer", "distance", "gap", "offset", "pixels"],
             tab: "DockPreviews",
             section: String(localized: "Dock Interaction"),
             icon: "arrow.up.and.down"
+        ),
+    ]
+
+    // MARK: - Quit Apps
+
+    private static let quitAppsItems: [SettingsSearchItem] = [
+        SettingsSearchItem(
+            id: "quitApps.lastWindow",
+            title: String(localized: "Quit app when closing its last window"),
+            description: String(localized: "Closing an app's final window quits the app, matching the Windows close-button behavior."),
+            keywords: ["quit", "close", "last window", "swift quit", "windows", "cross"],
+            tab: "QuitApps",
+            icon: "xmark.app.fill"
+        ),
+        SettingsSearchItem(
+            id: "quitApps.mode",
+            title: String(localized: "Apply quit behavior to"),
+            description: String(localized: "Choose whether the selected apps form an ignore list or an allow list."),
+            keywords: ["quit", "close", "scope", "mode", "allow list", "ignore list"],
+            tab: "QuitApps",
+            section: String(localized: "App Rules"),
+            icon: "checklist"
+        ),
+        SettingsSearchItem(
+            id: "quitApps.apps",
+            title: String(localized: "Choose Apps…"),
+            keywords: ["quit", "close", "apps", "allow list", "ignore list", "exclude"],
+            tab: "QuitApps",
+            section: String(localized: "App Rules"),
+            icon: "app.badge.checkmark"
+        ),
+        SettingsSearchItem(
+            id: "quitApps.cmdRightClick",
+            title: String(localized: "CMD + Right Click on dock icon to quit app"),
+            description: String(localized: "Hold Command and right-click a Dock icon to quit that application immediately."),
+            keywords: ["quit", "right click", "command", "force", "dock"],
+            tab: "QuitApps",
+            section: String(localized: "Dock Shortcut"),
+            icon: "cursorarrow.click.2"
         ),
     ]
 

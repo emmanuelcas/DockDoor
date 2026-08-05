@@ -166,6 +166,8 @@ struct SettingsView: View {
                         Section(String(localized: "Features", comment: "Settings section header")) {
                             Label(String(localized: "Dock Previews", comment: "Settings tab title"), systemImage: "dock.rectangle")
                                 .tag("DockPreviews")
+                            Label(String(localized: "Quit Apps", comment: "Settings tab title"), systemImage: "xmark.app.fill")
+                                .tag("QuitApps")
                             Label(String(localized: "Window Switcher", comment: "Settings tab title"), systemImage: "uiwindow.split.2x1")
                                 .tag("WindowSwitcher")
                             Label(String(localized: "Cmd+Tab", comment: "Settings tab title"), systemImage: "command")
@@ -204,6 +206,8 @@ struct SettingsView: View {
                     MainSettingsView()
                 case "DockPreviews":
                     DockPreviewsSettingsView()
+                case "QuitApps":
+                    QuitAppsSettingsView()
                 case "WindowSwitcher":
                     WindowSwitcherBehaviorSettingsView()
                 case "CmdTab":

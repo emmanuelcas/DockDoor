@@ -13,7 +13,7 @@ final class SettingsSearchEngine: ObservableObject {
     private let items: [SettingsSearchItem]
 
     private static let tabDisplayOrder = [
-        "General", "DockPreviews", "WindowSwitcher", "CmdTab",
+        "General", "DockPreviews", "QuitApps", "WindowSwitcher", "CmdTab",
         "DockLocking", "Appearance", "GesturesKeybinds", "Filters",
         "Widgets", "Advanced", "Support",
     ]
@@ -21,6 +21,7 @@ final class SettingsSearchEngine: ObservableObject {
     static let tabDisplayNames: [String: String] = [
         "General": String(localized: "General", comment: "Settings tab title"),
         "DockPreviews": String(localized: "Dock Previews", comment: "Settings tab title"),
+        "QuitApps": String(localized: "Quit Apps", comment: "Settings tab title"),
         "WindowSwitcher": String(localized: "Window Switcher", comment: "Settings tab title"),
         "CmdTab": String(localized: "Cmd+Tab", comment: "Settings tab title"),
         "DockLocking": String(localized: "Dock Locking", comment: "Settings tab title"),
@@ -98,6 +99,8 @@ final class SettingsSearchEngine: ObservableObject {
         switch item.id {
         case "dockPreviews.restoreAllMinimizedOnClick":
             Defaults[.dockClickAction] == .minimize
+        case "quitApps.mode", "quitApps.apps":
+            Defaults[.quitAppOnWindowClose]
         case "widgets.folderSort", "widgets.folderSortDirection", "widgets.folderRememberSort", "widgets.folderHiddenFiles":
             Defaults[.enableFolderWidget]
         default:
