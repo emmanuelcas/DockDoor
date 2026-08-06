@@ -39,7 +39,7 @@ struct DockLockingSettingsView: View {
                 if isOn, lockedDockScreenIdentifier.isEmpty {
                     lockedDockScreenIdentifier = NSScreen.main?.uniqueIdentifier() ?? ""
                 }
-                askUserToRestartApplication()
+                applyDockLockingSettings()
             }
         }
     }
@@ -59,6 +59,9 @@ struct DockLockingSettingsView: View {
                 }
                 .pickerStyle(.menu)
                 .settingsSearchTarget("dockLocking.screen")
+                .onChange(of: lockedDockScreenIdentifier) { _ in
+                    applyDockLockingSettings()
+                }
 
                 if isLockedScreenDisconnected {
                     Text("This display is currently disconnected. Dock locking will be disabled until it reconnects.")
@@ -92,5 +95,9 @@ struct DockLockingSettingsView: View {
             icon: "info.circle",
             text: "Dock Locking works best with a bottom-positioned Dock in a multi-monitor setup where \"Displays have separate Spaces\" is enabled in System Settings → Desktop & Dock → Mission Control. The Dock won't jump to another monitor while this feature is enabled."
         )
+    }
+
+    private func applyDockLockingSettings() {
+        (NSApp.delegate as? AppDelegate)?.applyDockLockingSettings()
     }
 }

@@ -85,9 +85,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 activeAppIndicator = ActiveAppIndicatorCoordinator()
             }
 
-            if Defaults[.enableDockLocking] {
-                dockLocker = DockLocker()
-            }
+            applyDockLockingSettings()
 
             #if !PEEKDECK
                 if updater.automaticallyChecksForUpdates {
@@ -175,6 +173,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         guard let statusBarItem else { return }
         NSStatusBar.system.removeStatusItem(statusBarItem)
         self.statusBarItem = nil
+    }
+
+    func applyDockLockingSettings() {
+        guard Defaults[.enableDockLocking] else {
+            dockLocker = nil
+            return
+        }
+
+        if let dockLocker {
+            dockLocker.reset()
+        } else {
+            dockLocker = DockLocker()
+        }
     }
 
     @objc func statusBarButtonClicked(_ sender: Any?) {
