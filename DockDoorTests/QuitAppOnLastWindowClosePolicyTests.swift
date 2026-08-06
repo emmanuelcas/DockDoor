@@ -1,9 +1,14 @@
+import Defaults
 @testable import DockDoor
 import Testing
 
 struct QuitAppOnLastWindowClosePolicyTests {
     private let safari = "com.apple.Safari"
     private let outlook = "com.microsoft.Outlook"
+
+    @Test func quitDelayDefaultsToExistingSafetyInterval() {
+        #expect(Defaults.Keys.quitAppOnWindowCloseDelay.defaultValue == 0.5)
+    }
 
     @Test func allAppsExceptSelectedQuitsUnlistedApp() {
         let result = WindowUtil.shouldQuitAppOnLastWindowClose(

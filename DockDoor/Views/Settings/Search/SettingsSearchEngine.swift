@@ -99,7 +99,7 @@ final class SettingsSearchEngine: ObservableObject {
         switch item.id {
         case "dockPreviews.restoreAllMinimizedOnClick":
             Defaults[.dockClickAction] == .minimize
-        case "quitApps.mode", "quitApps.apps":
+        case "quitApps.mode", "quitApps.apps", "quitApps.delay":
             Defaults[.quitAppOnWindowClose]
         case "widgets.folderSort", "widgets.folderSortDirection", "widgets.folderRememberSort", "widgets.folderHiddenFiles":
             Defaults[.enableFolderWidget]

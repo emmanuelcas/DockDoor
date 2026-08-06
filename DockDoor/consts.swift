@@ -45,6 +45,7 @@ extension Defaults.Keys {
     static let quitAppOnWindowCloseMode = Key<QuitAppOnWindowCloseMode>("quitAppOnWindowCloseMode", default: .allAppsExceptSelected)
     static let quitAppOnWindowCloseExcludedApps = Key<[String]>("quitAppOnWindowCloseExcludedApps", default: [])
     static let quitAppOnWindowCloseAllowedApps = Key<[String]>("quitAppOnWindowCloseAllowedApps", default: [])
+    static let quitAppOnWindowCloseDelay = Key<CGFloat>("quitAppOnWindowCloseDelay", default: 0.5)
     static let enableDockScrollGesture = Key<Bool>("enableDockScrollGesture", default: false)
     static let enableTitleBarScrollGesture = Key<Bool>("enableTitleBarScrollGesture", default: false)
     static let titleBarScrollCenteredWindowScale = Key<CGFloat>("titleBarScrollCenteredWindowScale", default: 0.8)

@@ -1424,7 +1424,8 @@ extension WindowUtil {
         DebugLogger.log("quitAppOnLastWindowClose", details: "App: \(app.localizedName ?? "Unknown") (PID: \(app.processIdentifier))")
         // Re-verify after a delay: apps like MS Office destroy and recreate windows during
         // view transitions, so the cached count can transiently hit 0 while a new window exists.
-        DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 0.5) {
+        let verificationDelay = max(0, TimeInterval(Defaults[.quitAppOnWindowCloseDelay]))
+        DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + verificationDelay) {
             guard !app.isTerminated else { return }
             let appAX = AXUIElementCreateApplication(app.processIdentifier)
             if let liveWindows = try? appAX.windows(), !liveWindows.isEmpty {

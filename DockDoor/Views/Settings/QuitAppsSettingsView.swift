@@ -8,6 +8,7 @@ struct QuitAppsSettingsView: View {
     @Default(.quitAppOnWindowCloseMode) private var quitAppOnWindowCloseMode
     @Default(.quitAppOnWindowCloseExcludedApps) private var quitAppOnWindowCloseExcludedApps
     @Default(.quitAppOnWindowCloseAllowedApps) private var quitAppOnWindowCloseAllowedApps
+    @Default(.quitAppOnWindowCloseDelay) private var quitAppOnWindowCloseDelay
 
     @State private var showingAppPicker = false
 
@@ -26,6 +27,7 @@ struct QuitAppsSettingsView: View {
 
                 if quitAppOnWindowClose {
                     appRulesSection
+                    quitDelaySection
                 }
 
                 SettingsGroup(header: "Dock Shortcut") {
@@ -109,6 +111,37 @@ struct QuitAppsSettingsView: View {
                 }
             }
         }
+    }
+
+    private var quitDelaySection: some View {
+        SettingsGroup(header: "Timing") {
+            VStack(alignment: .leading, spacing: 10) {
+                HStack(alignment: .top, spacing: 12) {
+                    SettingsIcon(systemName: "timer", color: .accentColor)
+
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Quit delay")
+                            .font(.body)
+                            .fontWeight(.medium)
+                        Text("Wait before quitting so apps that briefly recreate a window are not closed by mistake.")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
+
+                    Spacer()
+
+                    Text("\(quitAppOnWindowCloseDelay, specifier: "%.1f") seconds")
+                        .font(.system(.body, design: .monospaced))
+                        .foregroundStyle(.secondary)
+                }
+
+                Slider(value: $quitAppOnWindowCloseDelay, in: 0.1 ... 1.0, step: 0.1)
+                    .controlSize(.small)
+                    .padding(.leading, 40)
+                    .accessibilityLabel("Quit delay")
+            }
+        }
+        .settingsSearchTarget("quitApps.delay")
     }
 
     private func selectedAppRow(_ bundleIdentifier: String) -> some View {

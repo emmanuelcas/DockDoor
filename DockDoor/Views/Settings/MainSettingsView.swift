@@ -99,6 +99,7 @@ struct MainSettingsView: View {
                 Defaults[.dockClickAction] = Defaults.Keys.dockClickAction.defaultValue
                 Defaults[.restoreAllMinimizedWindowsOnDockClick] = Defaults.Keys.restoreAllMinimizedWindowsOnDockClick.defaultValue
                 Defaults[.enableCmdRightClickQuit] = Defaults.Keys.enableCmdRightClickQuit.defaultValue
+                Defaults[.quitAppOnWindowCloseDelay] = Defaults.Keys.quitAppOnWindowCloseDelay.defaultValue
                 Defaults[.dockPreviewActivationMode] = Defaults.Keys.dockPreviewActivationMode.defaultValue
                 Defaults[.dockPreviewActivationModifier] = Defaults.Keys.dockPreviewActivationModifier.defaultValue
                 Defaults[.previewHoverAction] = Defaults.Keys.previewHoverAction.defaultValue

@@ -296,6 +296,15 @@ enum SettingsSearchCatalog {
             icon: "app.badge.checkmark"
         ),
         SettingsSearchItem(
+            id: "quitApps.delay",
+            title: String(localized: "Quit delay"),
+            description: String(localized: "Wait before quitting so apps that briefly recreate a window are not closed by mistake."),
+            keywords: ["quit", "close", "delay", "timing", "speed", "last window"],
+            tab: "QuitApps",
+            section: String(localized: "Timing"),
+            icon: "timer"
+        ),
+        SettingsSearchItem(
             id: "quitApps.cmdRightClick",
             title: String(localized: "CMD + Right Click on dock icon to quit app"),
             description: String(localized: "Hold Command and right-click a Dock icon to quit that application immediately."),
