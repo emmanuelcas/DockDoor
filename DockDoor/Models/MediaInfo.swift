@@ -432,7 +432,7 @@ final class MediaInfo: ObservableObject {
         }
 
         var request = URLRequest(url: url)
-        request.setValue("DockDoor v1.0 (https://github.com/ethanbills/DockDoor)", forHTTPHeaderField: "User-Agent")
+        request.setValue("PeekDeck v1.0 (https://github.com/emmanuelcas/DockDoor)", forHTTPHeaderField: "User-Agent")
         request.timeoutInterval = 10.0
 
         let (data, response) = try await URLSession.shared.data(for: request)
@@ -469,7 +469,7 @@ final class MediaInfo: ObservableObject {
         }
 
         var request = URLRequest(url: url)
-        request.setValue("DockDoor v1.0 (https://github.com/ethanbills/DockDoor)", forHTTPHeaderField: "User-Agent")
+        request.setValue("PeekDeck v1.0 (https://github.com/emmanuelcas/DockDoor)", forHTTPHeaderField: "User-Agent")
         request.timeoutInterval = 10.0
 
         let (data, response) = try await URLSession.shared.data(for: request)

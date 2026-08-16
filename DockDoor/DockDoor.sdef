@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dictionary SYSTEM "file://localhost/System/Library/DTDs/sdef.dtd">
-<dictionary title="DockDoor Terminology">
+<dictionary title="PeekDeck Terminology">
 
     <suite name="Standard Suite" code="????" description="Common commands for all applications.">
         <command name="quit" code="aaboroot" description="Quit the application.">
@@ -8,7 +8,7 @@
         </command>
     </suite>
 
-    <suite name="DockDoor Suite" code="DKDR" description="Commands for controlling DockDoor.">
+    <suite name="PeekDeck Suite" code="DKDR" description="Commands for controlling PeekDeck.">
 
         <!-- Preview Commands -->
 

@@ -25,6 +25,7 @@ class WindowManipulationObservers {
     private var lastKnownWindowPositions: [CGWindowID: CGPoint] = [:]
     private var debouncedTasks: [String: Task<Void, Never>] = [:]
     private var cacheUpdateWorkItems: [pid_t: PendingCacheUpdate] = [:]
+    private var lastWindowQuitVerificationWorkItems: [pid_t: DispatchWorkItem] = [:]
     var updateDateTimeWorkItem: DispatchWorkItem?
     private func debounce(key: String, delay: TimeInterval = windowProcessingDebounceInterval, operation: @escaping () async -> Void) {
         debouncedTasks[key]?.cancel()
@@ -262,6 +263,8 @@ class WindowManipulationObservers {
         }
         cacheUpdateWorkItems[pid]?.workItem.cancel()
         cacheUpdateWorkItems.removeValue(forKey: pid)
+        lastWindowQuitVerificationWorkItems[pid]?.cancel()
+        lastWindowQuitVerificationWorkItems.removeValue(forKey: pid)
         observers.removeValue(forKey: pid)
         axObserverWorkQueue.async { [weak self] in
             self?.lastKnownAXWindowCounts.removeValue(forKey: pid)
@@ -430,9 +433,60 @@ class WindowManipulationObservers {
             WindowUtil.quitAppOnLastWindowCloseIfNeeded(
                 app: app,
                 previousWindowCount: previousCount,
-                remainingWindowCount: 0
+                remainingWindowCount: 0,
+                verificationDelay: 0
             )
         }
+    }
+
+    fileprivate func scheduleLastWindowQuitVerification(for app: NSRunningApplication) {
+        guard Defaults[.quitAppOnWindowClose],
+              WindowUtil.shouldQuitAppOnLastWindowClose(
+                  bundleIdentifier: app.bundleIdentifier,
+                  mode: Defaults[.quitAppOnWindowCloseMode],
+                  excludedApps: Defaults[.quitAppOnWindowCloseExcludedApps],
+                  allowedApps: Defaults[.quitAppOnWindowCloseAllowedApps]
+              )
+        else { return }
+
+        let pid = app.processIdentifier
+        guard lastWindowQuitVerificationWorkItems[pid] == nil else { return }
+
+        let previousWindowCount = max(
+            lastKnownAXWindowCounts[pid] ?? 0,
+            WindowUtil.readCachedWindows(for: pid).count
+        )
+        guard previousWindowCount > 0 else { return }
+
+        let verificationDelay = max(0, TimeInterval(Defaults[.quitAppOnWindowCloseDelay]))
+        let scheduledAt = CFAbsoluteTimeGetCurrent()
+        let workItem = DispatchWorkItem { [weak self] in
+            guard let self else { return }
+            defer { lastWindowQuitVerificationWorkItems.removeValue(forKey: pid) }
+            guard lastWindowQuitVerificationWorkItems[pid] != nil,
+                  !app.isTerminated,
+                  let liveWindows = try? AXUIElementCreateApplication(pid).windows()
+            else { return }
+
+            let elapsed = CFAbsoluteTimeGetCurrent() - scheduledAt
+            DebugLogger.log(
+                "lastWindowCloseVerification",
+                details: "Started for \(app.localizedName ?? "Unknown") (PID: \(pid)) after \(String(format: "%.3f", elapsed))s; configured \(String(format: "%.3f", verificationDelay))s"
+            )
+            lastKnownAXWindowCounts[pid] = liveWindows.count
+            WindowUtil.quitAppOnLastWindowCloseIfNeeded(
+                app: app,
+                previousWindowCount: previousWindowCount,
+                remainingWindowCount: liveWindows.count,
+                verificationDelay: 0
+            )
+        }
+        lastWindowQuitVerificationWorkItems[pid] = workItem
+        DebugLogger.log(
+            "lastWindowCloseVerification",
+            details: "Scheduled \(app.localizedName ?? "Unknown") (PID: \(pid)) after \(String(format: "%.3f", verificationDelay))s"
+        )
+        axObserverWorkQueue.asyncAfter(deadline: .now() + verificationDelay, execute: workItem)
     }
 
     private func updateTimestampIfAppActive(element: AXUIElement, app: NSRunningApplication) {
@@ -487,7 +541,8 @@ class WindowManipulationObservers {
                         WindowUtil.quitAppOnLastWindowCloseIfNeeded(
                             app: app,
                             previousWindowCount: previousWindows.count,
-                            remainingWindowCount: windowSet.count
+                            remainingWindowCount: windowSet.count,
+                            verificationDelay: 0
                         )
                     }
                 }
@@ -551,8 +606,16 @@ func axObserverCallback(observer: AXObserver, element: AXUIElement, notification
     let pid = pid_t(Int(bitPattern: userData))
     let notification = notificationName as String
     let key = "\(pid)-\(notification)"
+    let isWindowDestroyed = notification == (kAXUIElementDestroyedNotification as String)
 
     axObserverWorkQueue.async {
+        if isWindowDestroyed,
+           let app = NSRunningApplication(processIdentifier: pid),
+           let observerInstance = activeWindowManipulationObserversInstance
+        {
+            observerInstance.scheduleLastWindowQuitVerification(for: app)
+        }
+
         pendingNotifications[key]?.cancel()
 
         let workItem = DispatchWorkItem {

@@ -1406,7 +1406,8 @@ extension WindowUtil {
     @discardableResult
     static func quitAppOnLastWindowCloseIfNeeded(app: NSRunningApplication,
                                                  previousWindowCount: Int,
-                                                 remainingWindowCount: Int) -> Bool
+                                                 remainingWindowCount: Int,
+                                                 verificationDelay requestedVerificationDelay: TimeInterval? = nil) -> Bool
     {
         guard Defaults[.quitAppOnWindowClose],
               shouldQuitAppOnLastWindowClose(
@@ -1421,10 +1422,14 @@ extension WindowUtil {
             return false
         }
 
-        DebugLogger.log("quitAppOnLastWindowClose", details: "App: \(app.localizedName ?? "Unknown") (PID: \(app.processIdentifier))")
-        // Re-verify after a delay: apps like MS Office destroy and recreate windows during
-        // view transitions, so the cached count can transiently hit 0 while a new window exists.
-        let verificationDelay = max(0, TimeInterval(Defaults[.quitAppOnWindowCloseDelay]))
+        let verificationDelay = max(
+            0,
+            requestedVerificationDelay ?? TimeInterval(Defaults[.quitAppOnWindowCloseDelay])
+        )
+        DebugLogger.log(
+            "quitAppOnLastWindowClose",
+            details: "Scheduled \(app.localizedName ?? "Unknown") (PID: \(app.processIdentifier)) after \(String(format: "%.3f", verificationDelay))s"
+        )
         DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + verificationDelay) {
             guard !app.isTerminated else { return }
             let appAX = AXUIElementCreateApplication(app.processIdentifier)
@@ -1433,6 +1438,10 @@ extension WindowUtil {
                 return
             }
             DispatchQueue.main.async {
+                DebugLogger.log(
+                    "quitAppOnLastWindowClose",
+                    details: "Terminate requested for \(app.localizedName ?? "Unknown") (PID: \(app.processIdentifier))"
+                )
                 app.terminate()
                 purgeAppCache(with: app.processIdentifier)
             }

@@ -910,7 +910,7 @@ final class DockObserver {
         let pid = app.processIdentifier
         let appName = app.localizedName ?? "Unknown"
 
-        // Skip DockDoor itself to prevent crashes when clicking own dock icon
+        // Skip PeekDeck itself to prevent crashes when clicking own dock icon
         if app.bundleIdentifier == Bundle.main.bundleIdentifier {
             return false
         }

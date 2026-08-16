@@ -13,6 +13,7 @@ struct BaseSettingsView<Content: View>: View {
             ScrollView {
                 content
                     .padding(20)
+                    .toggleStyle(TrailingSwitchToggleStyle())
             }
             .frame(minWidth: 650, idealWidth: 700, minHeight: 650)
             .onChange(of: scrollTarget) { target in
@@ -32,5 +33,18 @@ struct BaseSettingsView<Content: View>: View {
                 }
             }
         }
+    }
+}
+
+private struct TrailingSwitchToggleStyle: ToggleStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        HStack(spacing: 12) {
+            configuration.label
+            Spacer(minLength: 12)
+            Toggle("", isOn: configuration.$isOn)
+                .labelsHidden()
+                .toggleStyle(.switch)
+        }
+        .frame(maxWidth: .infinity)
     }
 }

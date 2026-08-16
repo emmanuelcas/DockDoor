@@ -12,7 +12,6 @@ struct MainSettingsView: View {
     var body: some View {
         BaseSettingsView {
             VStack(alignment: .leading, spacing: 24) {
-                supportAndContributionsSection
                 applicationBasicsSection
                 activeAppIndicatorSection
 
@@ -24,14 +23,6 @@ struct MainSettingsView: View {
                 }
                 .padding(.top, 5)
             }
-        }
-    }
-
-    // MARK: - Support & Contributions
-
-    private var supportAndContributionsSection: some View {
-        SettingsGroup(header: "Support & Contributions", compact: true) {
-            SupportLinksSection()
         }
     }
 

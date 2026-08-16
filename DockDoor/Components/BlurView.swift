@@ -22,7 +22,7 @@ struct BackgroundAppearance: Equatable {
         .useOpaquePreviewBackground, .customBackgroundColor,
     ]
 
-    /// Variant 20 is a synthetic variant handled by DockDoor (not a native
+    /// Variant 20 is a synthetic variant handled by PeekDeck (not a native
     /// NSGlassEffectView value). The glass shader's own edge refraction serves
     /// as the border, so `borderedBackground` should be skipped.
     static let syntheticBlurVariant = 20

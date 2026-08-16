@@ -3,9 +3,9 @@ import SwiftUI
 struct DonationView: View {
     var body: some View {
         UniformCardView(
-            title: "Support DockDoor",
-            description: "If you find DockDoor useful, consider donating. Your support helps keep the project going!",
-            buttonTitle: "Support DockDoor",
+            title: "Support PeekDeck",
+            description: "If you find PeekDeck useful, consider donating. Your support helps keep the project going!",
+            buttonTitle: "Support PeekDeck",
             buttonLink: "https://buymeacoffee.com/keplercafe"
         )
     }

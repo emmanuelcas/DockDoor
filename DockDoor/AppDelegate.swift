@@ -161,9 +161,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         #if !PEEKDECK
             menu.addItem(NSMenuItem(title: String(localized: "Check for Updates…"), action: #selector(checkForUpdatesWrapper), keyEquivalent: ""))
         #endif
-        menu.addItem(NSMenuItem(title: "Support DockDoor Project", action: #selector(openDonationPage), keyEquivalent: ""))
-        menu.addItem(NSMenuItem(title: String(localized: "Leave a Review"), action: #selector(openReviewPage), keyEquivalent: ""))
-        menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: "Restart PeekDeck", action: #selector(restartAppWrapper), keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: "Quit PeekDeck", action: #selector(quitAppWrapper), keyEquivalent: "q"))
         button.menu = menu
@@ -204,18 +201,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     @objc private func checkForUpdatesWrapper() {
         updater.checkForUpdates()
-    }
-
-    @objc private func openDonationPage() {
-        if let url = URL(string: "https://dockdoor.net/donate") {
-            NSWorkspace.shared.open(url)
-        }
-    }
-
-    @objc private func openReviewPage() {
-        if let url = URL(string: "https://www.producthunt.com/products/dockdoor/reviews") {
-            NSWorkspace.shared.open(url)
-        }
     }
 
     private var wakeRecoveryTask: Task<Void, Never>?

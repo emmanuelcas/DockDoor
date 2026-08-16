@@ -719,7 +719,7 @@ class KeybindHelper {
 
     @MainActor
     private func handleModifierEvent(currentSwitcherModifierIsPressed: Bool, currentShiftState: Bool) {
-        // If system Cmd+Tab switcher is active, do not engage DockDoor's own switcher logic
+        // If system Cmd+Tab switcher is active, do not engage PeekDeck's own switcher logic
         if DockObserver.isCmdTabSwitcherActive {
             guard usesCmdTabWindowSwitcherKeybind() else { return }
             DockObserver.activeInstance?.teardownCmdTabObserver()

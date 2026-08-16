@@ -3,7 +3,7 @@ import Foundation
 
 // MARK: - Shared Command Logic
 
-/// Shared logic for DockDoor commands, used by AppleScript handlers
+/// Shared logic for PeekDeck commands, used by AppleScript handlers
 enum DockDoorCommands {
     enum AppIdentifierType: String {
         case name
@@ -316,8 +316,8 @@ enum DockDoorCommands {
 
         var lines: [String] = ["PeekDeck AppleScript Commands", ""]
 
-        // Find all commands in the DockDoor Suite
-        guard let commands = try? xml.nodes(forXPath: "//suite[@name='DockDoor Suite']/command") else {
+        // Find all commands in the PeekDeck Suite
+        guard let commands = try? xml.nodes(forXPath: "//suite[@name='PeekDeck Suite']/command") else {
             return "Error: Could not parse command definitions"
         }
 

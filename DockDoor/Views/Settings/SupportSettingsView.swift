@@ -14,7 +14,7 @@ struct SupportSettingsView: View {
         BaseSettingsView {
             VStack(alignment: .leading, spacing: 20) {
                 if !hideDockDoorProBanner {
-                    DockDoorProBanner {
+                    PeekDeckProBanner {
                         hideDockDoorProBanner = true
                     }
                 }
@@ -96,7 +96,7 @@ struct SupportSettingsView: View {
                         VStack(alignment: .leading, spacing: 2) {
                             Text("PeekDeck")
                                 .font(.body)
-                            Text("Updates from the original DockDoor project are disabled so they cannot replace PeekDeck.")
+                            Text("PeekDeck Updates from the upstream project are disabled so they cannot replace PeekDeck.")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                         }
@@ -273,7 +273,7 @@ struct SupportSettingsView: View {
     }
 }
 
-private struct DockDoorProBanner: View {
+private struct PeekDeckProBanner: View {
     private static let iconURL = URL(string: "https://pro.dockdoor.net/_astro/dockdoor-icon.DNTkj7IN_GoFVN.webp")!
     private static let destinationURL = URL(string: "https://pro.dockdoor.net")!
 
@@ -284,16 +284,16 @@ private struct DockDoorProBanner: View {
             proIcon
 
             VStack(alignment: .leading, spacing: 6) {
-                Text(String(localized: "DockDoor Pro", comment: "DockDoor Pro banner title"))
+                Text(String(localized: "PeekDeck Pro", comment: "PeekDeck Pro banner title"))
                     .font(.headline)
 
-                Text(String(localized: "A separate paid app that fully replaces the macOS Dock with profiles, widgets, file tray, media controls with lyrics, and a built-in switcher.", comment: "DockDoor Pro banner description"))
+                Text(String(localized: "A separate paid app that fully replaces the macOS Dock with profiles, widgets, file tray, media controls with lyrics, and a built-in switcher.", comment: "PeekDeck Pro banner description"))
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
 
                 Link(destination: Self.destinationURL) {
-                    Label(String(localized: "Learn More", comment: "DockDoor Pro banner link"), systemImage: "arrow.up.right")
+                    Label(String(localized: "Learn More", comment: "PeekDeck Pro banner link"), systemImage: "arrow.up.right")
                 }
                 .buttonStyle(AccentButtonStyle(small: true))
                 .padding(.top, 2)
@@ -307,8 +307,8 @@ private struct DockDoorProBanner: View {
                     .foregroundStyle(.secondary)
             }
             .buttonStyle(.plain)
-            .accessibilityLabel(String(localized: "Never show DockDoor Pro banner again", comment: "DockDoor Pro banner dismiss accessibility label"))
-            .help(String(localized: "Never show again", comment: "DockDoor Pro banner dismiss help text"))
+            .accessibilityLabel(String(localized: "Never show PeekDeck Pro banner again", comment: "PeekDeck Pro banner dismiss accessibility label"))
+            .help(String(localized: "Never show again", comment: "PeekDeck Pro banner dismiss help text"))
         }
         .padding(14)
         .background(Color(NSColor.controlBackgroundColor))

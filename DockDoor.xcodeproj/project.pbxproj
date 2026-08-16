@@ -43,7 +43,6 @@
 		4E665A7B0E9F4D458307E40493674B2B /* DockPreviewsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 970D8CBC36D84F14B8E6E83487035CFB /* DockPreviewsSettingsView.swift */; };
 		555110B7F7B99C7BD510DBC7 /* NativeTabGroupingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00D4B366E3CF5338182E065 /* NativeTabGroupingTests.swift */; };
 		5BCC969779654E67A6386C12FC709616 /* Glow.wav in Resources */ = {isa = PBXBuildFile; fileRef = D924F5BAEF564CC1AF84527876E14356 /* Glow.wav */; };
-		5C1867B80C2F46948F5C6336 /* SupportLinksSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2844BF18EB4D089A62A368 /* SupportLinksSection.swift */; };
 		5E55EE57430C4695BD7681A73BF3BF9D /* AdvancedSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B056906A7ACD4903BD5E1627B359AE2C /* AdvancedSettingsView.swift */; };
 		6080FA3A5F224B2F932F1652 /* WindowSizeSettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1639E8349CE94986A5F0B6A1 /* WindowSizeSettingsSection.swift */; };
 		646F091DD2DE460EA4D5444E /* GestureSettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13BC17F44A8F456A8061A07F /* GestureSettingsSection.swift */; };
@@ -250,7 +249,6 @@
 		1531BE8CC50A472986E31058 /* GeneralAppearanceSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralAppearanceSection.swift; sourceTree = "<group>"; };
 		1639E8349CE94986A5F0B6A1 /* WindowSizeSettingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowSizeSettingsSection.swift; sourceTree = "<group>"; };
 		1AE87C548D56298ADFB3F389 /* AppPickerSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPickerSheet.swift; sourceTree = "<group>"; };
-		1F2844BF18EB4D089A62A368 /* SupportLinksSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportLinksSection.swift; sourceTree = "<group>"; };
 		2361530A12344D0090E22EC428DC77D0 /* WindowSwitcherBehaviorSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowSwitcherBehaviorSettingsView.swift; sourceTree = "<group>"; };
 		27DC8C152CFA4DA7005F8F31 /* NumberFormatter+Convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NumberFormatter+Convenience.swift"; sourceTree = "<group>"; };
 		2FBA5BBE4DFA460FBF54D30E /* SettingsToggleRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsToggleRow.swift; sourceTree = "<group>"; };
@@ -781,7 +779,6 @@
 				3C341C31333F4619A4E79449 /* SettingsPickerRow.swift */,
 				0BD01DB1CA624D4F834C60EE /* SettingsNote.swift */,
 				FCF95019606449008856E149 /* SettingsLinkRow.swift */,
-				1F2844BF18EB4D089A62A368 /* SupportLinksSection.swift */,
 				B6BF9BDC596A48798C66EA25EBAA85EE /* SettingsMockPreview.swift */,
 			);
 			path = "Shared Components";
@@ -1255,7 +1252,6 @@
 				FEBF808E6ABA4DE7983FCACD /* SettingsPickerRow.swift in Sources */,
 				A093F1E5F59748358F395814 /* SettingsNote.swift in Sources */,
 				18D7DFD6690D45C8A63982D2 /* SettingsLinkRow.swift in Sources */,
-				5C1867B80C2F46948F5C6336 /* SupportLinksSection.swift in Sources */,
 				19186F88AF6644B3962A052F /* GeneralAppearanceSection.swift in Sources */,
 				6080FA3A5F224B2F932F1652 /* WindowSizeSettingsSection.swift in Sources */,
 				8EADE9C50DA94FA4B8E1E1F5 /* CompactModeSection.swift in Sources */,
