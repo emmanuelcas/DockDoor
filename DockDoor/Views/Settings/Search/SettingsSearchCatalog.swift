@@ -564,7 +564,8 @@ enum SettingsSearchCatalog {
         SettingsSearchItem(
             id: "dockLocking.screen",
             title: String(localized: "Lock Dock to"),
-            keywords: ["screen", "display", "which"],
+            description: String(localized: "Automatically follow the Main display or choose a specific display."),
+            keywords: ["screen", "display", "main", "primary", "automatic", "which"],
             tab: "DockLocking",
             section: String(localized: "Configuration"),
             icon: "display"

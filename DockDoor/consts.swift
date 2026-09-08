@@ -57,7 +57,10 @@ extension Defaults.Keys {
 
     // Dock Locking
     static let enableDockLocking = Key<Bool>("enableDockLocking", default: false)
-    static let lockedDockScreenIdentifier = Key<String>("lockedDockScreenIdentifier", default: "")
+    static let lockedDockScreenIdentifier = Key<String>(
+        "lockedDockScreenIdentifier",
+        default: DockLockScreenTarget.automaticMainIdentifier
+    )
     static let dockLockOverrideModifier = Key<Int>("dockLockOverrideModifier", default: DockLockModifier.option.rawValue)
     static let dockIconScrollBehavior = Key<DockIconScrollBehavior>("dockIconScrollBehavior", default: .activateHide)
     static let dockIconMediaScrollBehavior = Key<DockIconMediaScrollBehavior>("dockIconMediaScrollBehavior", default: .adjustVolume)

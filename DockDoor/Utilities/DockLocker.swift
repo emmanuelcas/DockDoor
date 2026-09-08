@@ -2,6 +2,18 @@ import ApplicationServices
 import Cocoa
 import Defaults
 
+enum DockLockScreenTarget {
+    static let automaticMainIdentifier = "__main_display__"
+
+    static func resolve(identifier: String, screens: [NSScreen] = NSScreen.screens) -> NSScreen? {
+        if identifier == automaticMainIdentifier {
+            let mainDisplayID = CGMainDisplayID()
+            return screens.first { $0.displayID == mainDisplayID }
+        }
+        return screens.first { $0.uniqueIdentifier() == identifier }
+    }
+}
+
 // MARK: - Geometry Types
 
 struct TriggerZone: Equatable {
@@ -318,14 +330,10 @@ final class DockLocker {
             return
         }
 
-        let lockedIdentifier = Defaults[.lockedDockScreenIdentifier]
-        guard !lockedIdentifier.isEmpty else {
-            cachedTriggerZones = []
-            return
-        }
-
         let cgFrames = screens.map(\.cgFrame)
-        let lockedIndex = screens.firstIndex { $0.uniqueIdentifier() == lockedIdentifier }
+        let lockedIdentifier = Defaults[.lockedDockScreenIdentifier]
+        let lockedScreen = DockLockScreenTarget.resolve(identifier: lockedIdentifier, screens: screens)
+        let lockedIndex = lockedScreen.flatMap { screens.firstIndex(of: $0) }
 
         guard let lockedIndex else {
             cachedTriggerZones = []
@@ -354,9 +362,7 @@ final class DockLocker {
 
     private func handleScreenConfigChanged() {
         let lockedIdentifier = Defaults[.lockedDockScreenIdentifier]
-        if !lockedIdentifier.isEmpty,
-           NSScreen.findScreen(byIdentifier: lockedIdentifier) == nil
-        {
+        if DockLockScreenTarget.resolve(identifier: lockedIdentifier) == nil {
             cachedTriggerZones = []
             removeEventTap()
             return

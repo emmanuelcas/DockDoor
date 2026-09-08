@@ -26,12 +26,19 @@ extension NSScreen {
 }
 
 extension NSScreen {
-    /// A user-facing display name including resolution and "(Main)" suffix if applicable.
+    var displayID: CGDirectDisplayID? {
+        guard let number = deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? NSNumber else {
+            return nil
+        }
+        return CGDirectDisplayID(number.uint32Value)
+    }
+
+    /// A user-facing display name including "(Main)" suffix if applicable.
     var displayName: String {
-        let isMain = self == NSScreen.main
+        let isMain = displayID == CGMainDisplayID()
         var name = localizedName
         if name.isEmpty {
-            if let displayID = deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? CGDirectDisplayID {
+            if let displayID {
                 name = String(format: NSLocalizedString("Display %u", comment: "Generic display name with CGDirectDisplayID"), displayID)
             } else {
                 name = String(localized: "Unknown Display")

@@ -8,7 +8,12 @@ struct DockLockingSettingsView: View {
 
     private var isLockedScreenDisconnected: Bool {
         !lockedDockScreenIdentifier.isEmpty
-            && !NSScreen.screens.contains { $0.uniqueIdentifier() == lockedDockScreenIdentifier }
+            && lockedDockScreenIdentifier != DockLockScreenTarget.automaticMainIdentifier
+            && DockLockScreenTarget.resolve(identifier: lockedDockScreenIdentifier) == nil
+    }
+
+    private var followsMainDisplay: Bool {
+        lockedDockScreenIdentifier == DockLockScreenTarget.automaticMainIdentifier
     }
 
     var body: some View {
@@ -37,7 +42,7 @@ struct DockLockingSettingsView: View {
             .settingsSearchTarget("dockLocking.enable")
             .onChange(of: enableDockLocking) { isOn in
                 if isOn, lockedDockScreenIdentifier.isEmpty {
-                    lockedDockScreenIdentifier = NSScreen.main?.uniqueIdentifier() ?? ""
+                    lockedDockScreenIdentifier = DockLockScreenTarget.automaticMainIdentifier
                 }
                 applyDockLockingSettings()
             }
@@ -50,6 +55,11 @@ struct DockLockingSettingsView: View {
         SettingsGroup(header: "Configuration") {
             VStack(alignment: .leading, spacing: 10) {
                 Picker("Lock Dock to", selection: $lockedDockScreenIdentifier) {
+                    Text("Main Display (Automatic)")
+                        .tag(DockLockScreenTarget.automaticMainIdentifier)
+
+                    Divider()
+
                     ForEach(NSScreen.screens, id: \.self) { screen in
                         Text(screen.displayName).tag(screen.uniqueIdentifier())
                     }
@@ -63,7 +73,11 @@ struct DockLockingSettingsView: View {
                     applyDockLockingSettings()
                 }
 
-                if isLockedScreenDisconnected {
+                if followsMainDisplay {
+                    Text("Automatically follows whichever display is designated as Main in macOS.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                } else if isLockedScreenDisconnected {
                     Text("This display is currently disconnected. Dock locking will be disabled until it reconnects.")
                         .font(.caption)
                         .foregroundColor(.secondary)
@@ -84,6 +98,11 @@ struct DockLockingSettingsView: View {
                 Text("Hold this key to temporarily allow the Dock to move freely.")
                     .font(.caption)
                     .foregroundColor(.secondary)
+            }
+        }
+        .onAppear {
+            if lockedDockScreenIdentifier.isEmpty {
+                lockedDockScreenIdentifier = DockLockScreenTarget.automaticMainIdentifier
             }
         }
     }
