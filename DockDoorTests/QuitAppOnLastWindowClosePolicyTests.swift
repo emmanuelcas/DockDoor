@@ -1,5 +1,6 @@
 import Defaults
 @testable import DockDoor
+import Foundation
 import Testing
 
 struct QuitAppOnLastWindowClosePolicyTests {
@@ -61,6 +62,18 @@ struct QuitAppOnLastWindowClosePolicyTests {
             mode: mode,
             excludedApps: [],
             allowedApps: ["com.apple.finder"]
+        )
+
+        #expect(!result)
+    }
+
+    @Test(arguments: QuitAppOnWindowCloseMode.allCases)
+    func peekDeckAlwaysStaysRunning(mode: QuitAppOnWindowCloseMode) {
+        let result = WindowUtil.shouldQuitAppOnLastWindowClose(
+            bundleIdentifier: Bundle.main.bundleIdentifier,
+            mode: mode,
+            excludedApps: [],
+            allowedApps: [Bundle.main.bundleIdentifier].compactMap(\.self)
         )
 
         #expect(!result)

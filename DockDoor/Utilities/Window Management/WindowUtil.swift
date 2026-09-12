@@ -1454,7 +1454,9 @@ extension WindowUtil {
                                                excludedApps: [String],
                                                allowedApps: [String]) -> Bool
     {
-        guard bundleIdentifier != "com.apple.finder" else { return false }
+        guard bundleIdentifier != "com.apple.finder",
+              bundleIdentifier != Bundle.main.bundleIdentifier
+        else { return false }
 
         switch mode {
         case .allAppsExceptSelected:
